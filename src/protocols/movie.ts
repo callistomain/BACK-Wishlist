@@ -3,7 +3,9 @@ export type MovieEntity = {
   name: string,
   platform: string,
   genre: string,
-  status: boolean
+  status: boolean,
+  note: string
 };
 
-export type Movie = Omit<MovieEntity, "id">;
+export type Movie = Omit<MovieEntity, "id" | "status" | "note">;
+export type MovieNote = { note: string };
