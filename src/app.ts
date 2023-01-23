@@ -1,13 +1,15 @@
 import express, { json } from 'express';
 import cors from 'cors';
-import moviesRoute from './routes/movies.route.js';
+import { moviesRouter } from '@/routers';
 
 const app = express();
-app.use(json());
-app.use(cors());
-app.use(moviesRoute);
+app
+  .use(cors())
+  .use(json())
+  .get("/health", (req, res) => res.send("OK!"))
+  .use("/movies", moviesRouter);
 
-const port = process.env.PORT || '4000';
+const port = +process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Server running at port ${port}...`);
 });

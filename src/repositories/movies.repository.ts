@@ -1,19 +1,19 @@
 import { QueryResult } from "pg";
-import { connection } from "../database/database.js";
-import { Movie, MovieEntity, MovieNote } from "../protocols/movie.js";
+import { connection } from "@/config";
+import { Movie, MovieEntity } from "@/protocols";
 
-export function findMany(): Promise<QueryResult<MovieEntity>> {
+export function selectAll(): Promise<QueryResult<MovieEntity>> {
   return connection.query(`SELECT * FROM movies`);
 }
 
-export function findCountGenre(): Promise<QueryResult<MovieEntity>> {
+export function selectCountByGenre(): Promise<QueryResult<MovieEntity>> {
   return connection.query(`
     SELECT genre, COUNT(genre) AS "moviesCount" FROM movies
     GROUP BY genre
   `);
 }
 
-export function insertUnique(movie: Movie): Promise<QueryResult> {
+export function insertOne(movie: Movie): Promise<QueryResult> {
   const { name, platform, genre } = movie;
 
   return connection.query(`
@@ -21,13 +21,13 @@ export function insertUnique(movie: Movie): Promise<QueryResult> {
   `, [name, platform, genre]);
 }
 
-export function patchUnique(note: string, id: number): Promise<QueryResult> {
+export function updateOne(note: string, id: number): Promise<QueryResult> {
   return connection.query(`
     UPDATE movies SET status=true, note=$1 WHERE id=$2
   `, [note, id]);
 }
 
-export function deleteUnique(id: number): Promise<QueryResult> {
+export function deleteOne(id: number): Promise<QueryResult> {
   return connection.query(`
     DELETE FROM movies WHERE id=$1
   `, [id]);
